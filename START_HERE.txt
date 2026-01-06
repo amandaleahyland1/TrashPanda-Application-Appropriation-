@@ -1,0 +1,26 @@
+TrashPandas – Job Application Package Builder (Offline Bundle)
+============================================================
+
+Files:
+- index.html (open this)
+- assets/animations/* (required)
+
+Quick Start (Android tablet/phone with OTG flash drive):
+1) Plug in the flash drive via OTG adapter.
+2) Open a File Manager app.
+3) Navigate to this folder and tap index.html.
+
+Notes:
+- The app still requires internet to call the Gemini API.
+- Some mobile browsers restrict advanced features when opened via file://.
+  If something doesn’t work, use the 'Local Server' option below.
+
+Local Server option (most reliable):
+Android (Termux):
+  pkg update && pkg install python
+  cd <this-folder>
+  python -m http.server 8000
+  Open browser to: http://127.0.0.1:8000
+
+iPhone/iPad:
+  iOS often blocks file:// web apps. Use hosting (Netlify) or a local-server app.

@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrashPanda Templates – Application Appropriation</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .glass { @apply bg-white/70 dark:bg-zinc-900/50 backdrop-blur-md; }
+      .card  { @apply glass rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10; }
+      .btn   { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition disabled:opacity-50 disabled:cursor-not-allowed bg-zinc-900 text-white hover:bg-black dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white; }
+      .btn-outline { @apply bg-transparent ring-1 ring-zinc-300 text-zinc-800 hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed dark:ring-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800; }
+      .btn-icon { @apply inline-flex items-center justify-center gap-2 rounded-xl p-2 font-medium transition disabled:opacity-50 disabled:cursor-not-allowed bg-zinc-900 text-white hover:bg-black dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white; }
+      .field { @apply w-full rounded-xl border border-zinc-300/80 dark:border-zinc-700/80 px-3 py-2 bg-white/70 dark:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed; }
+      .label { @apply text-sm font-medium text-zinc-700 dark:text-zinc-200; }
+      .h1    { @apply text-xl md:text-2xl font-semibold tracking-tight; }
+      .h2    { @apply text-lg font-semibold tracking-tight; }
+      .pill  { @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-zinc-300 dark:ring-zinc-700 bg-white/70 dark:bg-zinc-900/60 text-zinc-700 dark:text-zinc-200; }
+      .section { @apply p-4 md:p-6; }
+      .muted { @apply text-zinc-600 dark:text-zinc-400; }
+      .kbd { @apply px-2 py-0.5 rounded border border-zinc-300 dark:border-zinc-700 text-xs font-mono; }
+      .tab-btn { @apply px-3 py-2 rounded-lg text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition whitespace-nowrap; }
+      .tab-btn-active { @apply bg-zinc-900 text-white dark:bg-white dark:text-zinc-900; }
+      .copy { @apply btn-outline px-3 py-1.5 text-xs; }
+
+      .focus-ring:focus-visible {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 3px theme('colors.indigo.500 / 50%');
+      }
+
+      .chat-container { display:flex; flex-direction:column; height: calc(80vh - 40px); min-height: 500px; }
+      #chat-history { flex-grow:1; overflow-y:auto; }
+
+      .loading-dot { animation: bounce 1.4s infinite ease-in-out both; }
+      .loading-dot:nth-child(1){ animation-delay:-.32s }
+      .loading-dot:nth-child(2){ animation-delay:-.16s }
+      @keyframes bounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+
+      .fade-in { animation: fadeIn .5s ease-out forwards; }
+      @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+
+      .prose { @apply text-zinc-900 dark:text-zinc-100; }
+      .prose h1 { @apply text-2xl font-bold mb-4; }
+      .prose h2 { @apply text-xl font-semibold mt-6 mb-3; }
+      .prose h3 { @apply text-lg font-semibold mt-4 mb-2; }
+      .prose p  { @apply mb-4 leading-relaxed text-zinc-800 dark:text-zinc-200; }
+      .prose ul { @apply list-disc list-outside pl-5 mb-4 space-y-1; }
+      .prose li { @apply pl-2 text-zinc-800 dark:text-zinc-200; }
+      .prose strong { @apply font-semibold; }
+      .prose hr { @apply my-6 border-zinc-200 dark:border-zinc-700; }
+      .prose blockquote { @apply border-l-4 border-indigo-500 pl-4 py-2 my-4 italic text-zinc-600 dark:text-zinc-400; }
+    }
+
+    body { @apply font-sans text-zinc-900 dark:text-zinc-100 bg-gradient-to-br from-indigo-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900; }
+    h1,h2,h3,h4,h5,h6 { @apply text-zinc-900 dark:text-zinc-100; }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #ced4da; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #495057; }
+    ::-webkit-scrollbar-thumb:hover { background: #adb5bd; }
+    .dark ::-webkit-scrollbar-thumb:hover { background: #6c757d; }
+  </style>
+
+  <style id="tp-input-visibility-patch">
+    html, body, input, textarea, select, button {
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, ui-sans-serif, sans-serif;
+    }
+    :root { --tp-text:#111827; --tp-text-inverse:#F9FAFB; --tp-muted:#9CA3AF; }
+    body { color: var(--tp-text); }
+    .dark body { color: var(--tp-text-inverse); }
+
+    input, textarea, select {
+      color: var(--tp-text) !important;
+      background-color: #ffffff;
+      -webkit-text-fill-color: var(--tp-text);
+      opacity: 1 !important;
+      text-shadow: none !important;
+      filter: none !important;
+      mix-blend-mode: normal !important;
+    }
+    input::placeholder, textarea::placeholder { color: var(--tp-muted); opacity: 1; }
+
+    .dark input, .dark textarea, .dark select {
+      color: var(--tp-text-inverse) !important;
+      background-color: #0B0F14;
+      border-color: #374151;
+      -webkit-text-fill-color: var(--tp-text-inverse);
+    }
+    .dark input::placeholder, .dark textarea::placeholder { color: #7A8A9A; opacity: 1; }
+
+    input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+      -webkit-text-fill-color: inherit !important;
+      transition: background-color 9999s ease-out 0s;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const saved = localStorage.getItem('ai-job-app-theme');
+      const dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark', dark);
+    })();
+  </script>
+
+<style>
+  /* Hide developer/internal export buttons from end users */
+  #tp-btn-json, #tp-btn-html { display: none !important; }
+
+  /* Print/PDF: only print the Preview & Export panel contents cleanly */
+  @media print {
+    body * { visibility: hidden !important; }
+    #panel-preview-export, #panel-preview-export * { visibility: visible !important; }
+    #panel-preview-export {
+      position: absolute !important;
+      left: 0 !important; top: 0 !important;
+      width: 100% !important;
+      padding: 28px !important;
+      background: #fff !important;
+      color: #000 !important;
+    }
+    button, .tab-btn, nav, header { display: none !important; }
+  }
+</style>
+
+</head>
+
+<body class="h-full min-h-screen">
+
+  <!-- ===== Always-on Ringtail Background ===== -->
+  <style>
+    :root{
+      --rt-bg0:#0e1116; --rt-bg1:#141922;
+      --rt-ink:#e8eef6; --rt-muted:#a9b7c7;
+      --rt-c1:#7bd1ff; --rt-c2:#ffd166;
+      --rt-card:#171d26; --rt-border:#222a35;
+    }
+    body.ringtail-bg{
+      color:var(--rt-ink);
+      background:
+       radial-gradient(1200px 800px at -10% -20%, rgba(123,209,255,.06), transparent 60%),
+       radial-gradient(1000px 700px at 110% 10%, rgba(255,209,102,.06), transparent 60%),
+       linear-gradient(180deg, var(--rt-bg0), var(--rt-bg1));
+      background-attachment: fixed, fixed, fixed;
+    }
+    .rt-paws{
+      position:fixed; inset:0; z-index:-1; opacity:.18; pointer-events:none;
+      background-image:url("data:image/svg+xml;utf8,\
+      <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
+        <g fill='none' stroke='%23a9b7c7' stroke-opacity='.55' stroke-width='2'>\
+          <circle cx='18' cy='14' r='5'/>\
+          <circle cx='30' cy='10' r='4'/>\
+          <circle cx='22' cy='6' r='3.5'/>\
+          <circle cx='12' cy='8' r='3.5'/>\
+          <path d='M8 28 q12 8 28 0 q-14 -8 -28 0z'/>\
+        </g>\
+      </svg>");
+      background-size:64px 64px;
+      animation: rtScroll 28s linear infinite;
+    }
+    @keyframes rtScroll { from{background-position:0 0} to{background-position:0 64px} }
+    .card{ backdrop-filter:saturate(1.05) blur(6px); }
+  </style>
+  <div class="rt-paws" aria-hidden="true"></div>
+  <script> document.body.classList.add('ringtail-bg'); </script>
+  <!-- ===== /Always-on Ringtail Background ===== -->
+
+  <!-- ===== Branded Header ===== -->
+  <header class="sticky top-0 z-40 border-b border-zinc-200/70 dark:border-zinc-800/70 glass">
+    <div class="mx-auto max-w-7xl px-4 py-3 md:py-4 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl flex items-center justify-center bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow">
+          🦝
+        </div>
+        <div>
+          <h1 class="h1">TrashPanda Templates – Application Appropriation</h1>
+          <div class="text-xs md:text-sm muted -mt-0.5">trashpandas are tuning up templates · professional results with a little mischief</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 md:gap-3">
+        <span class="pill">Powered by Gemini</span>
+        <select id="modelSelect" class="field md:w-56 focus-ring" title="Select AI Model">
+          <option value="gemini-2.5-flash-preview-09-2025">gemini-2.5-flash (Fastest)</option>
+          <option value="gemini-1.5-pro-preview-08-2024">gemini-1.5-pro (Advanced)</option>
+        </select>
+        <button id="themeBtn" class="btn-outline focus-ring p-2" title="Toggle theme">
+          <span class="sr-only">Toggle theme</span>
+          <span id="themeIcon"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-6 md:py-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- LEFT: CHAT -->
+    <section class="card flex flex-col chat-container">
+      <div class="section border-b border-zinc-200/70 dark:border-zinc-800/70">
+        <h2 class="h2">Q&A Input</h2>
+      </div>
+      <div id="chat-history" class="p-4 md:p-6 space-y-4"></div>
+
+      <div id="typing-indicator" class="hidden px-4 md:px-6 pb-2">
+        <div class="flex items-center gap-2">
+          <div class="flex space-x-1">
+            <span class="loading-dot w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full"></span>
+            <span class="loading-dot w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full"></span>
+            <span class="loading-dot w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full"></span>
+          </div>
+          <span class="text-sm muted italic">trashpandas are tuning up templates…</span>
+        </div>
+      </div>
+
+      <div id="input-area" class="section border-t border-zinc-200/70 dark:border-zinc-800/70 mt-auto">
+        <div class="flex items-end gap-3">
+          <button id="back-button" class="btn-outline focus-ring text-sm px-3 py-2" type="button" title="Edit previous answer">⟵ Back</button>
+          <textarea id="chat-input" rows="1" class="field flex-1 resize-none focus-ring" placeholder="Paste response here..."></textarea>
+          <button id="send-button" class="btn-icon focus-ring" title="Send (Ctrl+Enter)">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: OUTPUTS -->
+    <section class="card flex flex-col" style="height: calc(80vh - 40px); min-height: 500px;">
+      <div class="section border-b border-zinc-200/70 dark:border-zinc-800/70 flex items-center justify-between flex-wrap gap-2">
+        <h2 class="h2">Outputs</h2>
+        <div class="flex gap-1 overflow-x-auto pb-1" id="tabs-container">
+          <button class="tab-btn tab-btn-active focus-ring" data-tab="researchBrief">Research</button>
+          <button class="tab-btn focus-ring" data-tab="roleSummary">Role Sum.</button>
+          <button class="tab-btn focus-ring" data-tab="resumeATS">ATS Résumé</button>
+          <button class="tab-btn focus-ring" data-tab="resumeTailored">Tailored Résumé</button>
+          <button class="tab-btn focus-ring" data-tab="coverLetter">Cover Letter</button>
+          <button class="tab-btn focus-ring" data-tab="previewExport">Preview &amp; Export</button>
+        </div>
+      </div>
+
+      <div class="p-4 md:p-6 flex-1 overflow-y-auto" id="output-scroll-container">
+        <div id="missingWrap" class="hidden mb-4">
+          <div class="rounded-xl border border-amber-300/60 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-800 p-4">
+            <div class="font-semibold text-amber-800 dark:text-amber-200">Missing Information</div>
+            <ul id="missingList" class="list-disc pl-6 mt-2 text-sm text-amber-700 dark:text-amber-300"></ul>
+          </div>
+        </div>
+
+        <div class="flex justify-end mb-3 space-x-2">
+          <button id="copyPackageBtn" class="copy focus-ring hidden">Copy Data Package</button>
+          <button id="copyBtn" class="copy focus-ring">Copy Section</button>
+        </div>
+
+        <section id="panel-preview-export" class="hidden space-y-4">
+          <div class="flex flex-wrap items-center gap-4 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/70 bg-white/80 dark:bg-zinc-900/60 px-4 py-3">
+            <div class="flex items-center gap-2 flex-wrap">
+              <button id="tp-btn-pdf" class="btn focus-ring" type="button">📄 Save as PDF</button>
+
+              <button id="tp-btn-txt-resume" class="btn-outline focus-ring" type="button" disabled>⬇️ Tailored Résumé (TXT)</button>
+              <button id="tp-btn-txt-cover" class="btn-outline focus-ring" type="button" disabled>⬇️ Cover Letter (TXT)</button>
+              <button id="tp-btn-txt-all" class="btn-outline focus-ring" type="button" disabled>⬇️ Full Package (TXT)</button>
+
+              <button id="tp-btn-zip" class="btn-outline focus-ring" type="button" title="Advanced: Some Windows setups may block ZIP downloads.">📦 Download ZIP</button>
+
+              <!-- Dev/internal (hidden by CSS) -->
+              <button id="tp-btn-json" class="btn-outline focus-ring" type="button" disabled>🗂️ Download JSON</button>
+              <button id="tp-btn-html" class="btn-outline focus-ring" type="button">🗂️ Download App HTML</button>
+            </div>
+            <div class="ml-auto flex flex-col gap-1 text-sm min-w-[220px]">
+              <div class="flex items-center gap-2">
+                <span>Applicant Tracking System (<strong>ATS</strong>) score</span>
+                <details class="relative">
+                  <summary class="cursor-pointer text-xs uppercase tracking-wide opacity-70 hover:opacity-100">what’s this?</summary>
+                  <div class="absolute right-0 mt-2 w-72 max-w-xs rounded-xl border border-zinc-200/80 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-3 text-sm leading-5 shadow-lg">
+                    <p class="mb-2">ATS is the software that sorts applications.</p>
+                    <p class="mb-2">This score estimates how well your résumé wording mirrors the job posting’s key terms.</p>
+                    <p class="mb-0"><strong>Raccoon tip:</strong> add truthful, quantified achievements that reflect the requirements.</p>
+                  </div>
+                </details>
+              </div>
+              <span class="text-xs muted">How closely your résumé matches the job’s keywords.</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div id="tp-ats-wrap" class="h-4 w-32 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
+                <div id="tp-ats-bar" class="h-full w-0 bg-emerald-500 transition-[width] duration-300"></div>
+              </div>
+              <span id="tp-ats-label" class="w-12 text-right tabular-nums text-sm" aria-live="polite">0%</span>
+            </div>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/70 bg-white/80 dark:bg-zinc-900/60 p-4">
+              <h3 class="font-semibold mb-1">Original Résumé</h3>
+              <p class="text-xs muted mb-3">As submitted—no raccoon fingerprints.</p>
+              <article id="tp-original" class="prose prose-zinc dark:prose-invert max-w-none whitespace-pre-wrap text-sm">Generate your package to populate this preview.</article>
+            </div>
+            <div class="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/70 bg-white/80 dark:bg-zinc-900/60 p-4">
+              <h3 class="font-semibold mb-1">Tailored Résumé</h3>
+              <p class="text-xs muted mb-3">Optimized to mirror the role’s requirements.</p>
+              <article id="tp-tailored" class="prose prose-zinc dark:prose-invert max-w-none whitespace-pre-wrap text-sm">Generate your package to populate this preview.</article>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/70 bg-white/80 dark:bg-zinc-900/60 p-4">
+            <h3 class="font-semibold mb-1">Cover Letter</h3>
+            <p class="text-xs muted mb-3">Tight, specific, and ready to sign.</p>
+            <article id="tp-cover" class="prose prose-zinc dark:prose-invert max-w-none whitespace-pre-wrap text-sm">Generate your package to populate this preview.</article>
+          </div>
+
+          <p class="text-xs muted">
+            Local only. Downloads are generated in your browser. This ATS score is an estimate to guide wording tweaks—it isn’t an official company rating.
+          </p>
+        </section>
+
+        <article id="output" class="prose prose-zinc max-w-none dark:prose-invert">
+          <p class="muted">Complete the Q&A to generate your package.</p>
+        </article>
+
+        <div id="output-loader" class="hidden mt-6 flex flex-col items-center justify-center text-center muted">
+          <div class="flex space-x-1 mb-2">
+            <span class="loading-dot w-3 h-3 bg-zinc-500 dark:bg-zinc-400 rounded-full"></span>
+            <span class="loading-dot w-3 h-3 bg-zinc-500 dark:bg-zinc-400 rounded-full"></span>
+            <span class="loading-dot w-3 h-3 bg-zinc-500 dark:bg-zinc-400 rounded-full"></span>
+          </div>
+          <p class="text-sm">Generating final documents...</p>
+        </div>
+
+        <div id="output-error" class="hidden mt-6 rounded-xl border border-rose-300/60 bg-rose-50 dark:bg-rose-900/20 dark:border-rose-800 p-4">
+          <div class="font-semibold mb-1 text-rose-800 dark:text-rose-200">Generation Failed</div>
+          <div id="output-error-text" class="text-sm text-rose-700 dark:text-rose-300">Unknown error</div>
+        </div>
+
+        <details id="rawWrap" class="hidden mt-6">
+          <summary class="cursor-pointer text-sm underline underline-offset-4 muted hover:text-indigo-600 dark:hover:text-indigo-400">Show raw JSON (debug)</summary>
+          <pre id="raw" class="mt-2 overflow-auto text-xs p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 ring-1 ring-zinc-200 dark:ring-zinc-700"></pre>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Raccoon Family Fence Walk (shows while analyzing/generating) ===== -->
+  <style>
+    .rt-walkline{position:relative;width:100%;height:84px;overflow:hidden;pointer-events:none;user-select:none}
+    .rt-walkline::before{content:"";position:absolute;inset:0;background:
+      linear-gradient(#6a4f3b 0 0) 0 26px/100% 6px no-repeat,
+      linear-gradient(#6a4f3b 0 0) 0 56px/100% 6px no-repeat,
+      repeating-linear-gradient(to right,transparent 0 46px,#7b5b44 46px 52px,transparent 52px 98px);opacity:.9}
+    .rt-parade{position:absolute;left:-40%;bottom:12px;height:64px;display:flex;align-items:flex-end;gap:18px;animation:rtWalkAcross 12s linear infinite;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
+    @keyframes rtWalkAcross{from{transform:translateX(0)}to{transform:translateX(160%)}}
+    .rt-coon{width:88px;height:62px}.rt-kit{width:56px;height:40px}.rt-kit:nth-child(2){animation-delay:.08s}.rt-kit:nth-child(3){animation-delay:.16s}
+    .rt-body{fill:#2f3846}.rt-back{fill:#3a4352}.rt-mask{fill:#1e2430}.rt-eye{fill:#0b0f17}.rt-glint{fill:#bde3ff}.rt-belly{fill:#596171}
+    .rt-leg{transform-origin:50% 0%;animation:rtLeg 480ms ease-in-out infinite alternate}
+    .rt-leg.back{animation-delay:120ms}.rt-leg.mid{animation-delay:240ms}.rt-leg.front{animation-delay:360ms}
+    @keyframes rtLeg{from{transform:rotate(12deg)}to{transform:rotate(-14deg)}}
+    .rt-tail{transform-origin:8% 60%;animation:rtTail 900ms ease-in-out infinite alternate}
+    @keyframes rtTail{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+    .rt-bounce{animation:rtBounce 480ms ease-in-out infinite alternate}
+    @keyframes rtBounce{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+    .rt-hide{display:none!important}
+  </style>
+  <div id="rtFamilyWalk" class="rt-walkline rt-hide" aria-hidden="true">
+    <div class="rt-parade">
+      <!-- Adult -->
+      <svg class="rt-coon rt-bounce" viewBox="0 0 110 78" role="img" aria-label="Raccoon walking">
+        <g class="rt-tail">
+          <path class="rt-back" d="M10 48c30 8 44 14 49 24s-6 14-22 8S10 66 6 58c2-4 3-7 4-10z"/>
+          <g fill="#232a35" opacity=".9"><ellipse cx="30" cy="66" rx="10" ry="6"/><ellipse cx="46" cy="71" rx="10" ry="6"/></g>
+        </g>
+        <ellipse class="rt-body" cx="58" cy="46" rx="38" ry="26"/>
+        <ellipse class="rt-belly" cx="62" cy="54" rx="20" ry="14" opacity=".35"/>
+        <g transform="translate(36,52)">
+          <rect class="rt-leg back"  x="-4" y="0" width="6" height="20" rx="3" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="8"  y="0" width="6" height="20" rx="3" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="28" y="0" width="6" height="20" rx="3" fill="#232a35"/>
+          <rect class="rt-leg front" x="40" y="0" width="6" height="20" rx="3" fill="#232a35"/>
+        </g>
+        <g transform="translate(80,28)">
+          <ellipse class="rt-back" cx="-2" cy="10" rx="16" ry="12"/>
+          <path class="rt-mask" d="M-16 8h28v7c-4 5-12 8-16 8s-12-3-16-8z"/>
+          <circle class="rt-eye" cx="-6" cy="13" r="3.6"/><circle class="rt-eye" cx="4" cy="13" r="3.6"/>
+          <circle class="rt-glint" cx="-6" cy="13" r="1.2"/><circle class="rt-glint" cx="4" cy="13" r="1.2"/><circle class="rt-glint" cx="-1" cy="18" r="1.6"/>
+          <path d="M-10 0l-8-6a9 9 0 0 1 12-5l2 6z" fill="#4b5566"/><path d="M10 0l8-6a9 9 0 0 0-12-5l-2 6z" fill="#4b5566"/>
+        </g>
+      </svg>
+      <!-- Kit 1 -->
+      <svg class="rt-kit rt-bounce" viewBox="0 0 90 64" aria-hidden="true">
+        <g class="rt-tail">
+          <path class="rt-back" d="M8 40c20 6 30 10 34 18s-4 10-15 6-21-9-24-15c2-3 3-5 5-9z"/>
+          <g fill="#232a35" opacity=".9"><ellipse cx="22" cy="54" rx="7" ry="4.5"/><ellipse cx="34" cy="58" rx="7" ry="4.5"/></g>
+        </g>
+        <ellipse class="rt-body" cx="48" cy="38" rx="28" ry="20"/>
+        <g transform="translate(30,44)">
+          <rect class="rt-leg back"  x="-3" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="6"  y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="20" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg front" x="29" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+        </g>
+        <g transform="translate(63,24)">
+          <ellipse class="rt-back" cx="-2" cy="8" rx="12" ry="9"/>
+          <path class="rt-mask" d="M-12 6h20v5c-3 4-9 6-12 6s-9-2-12-6z"/>
+          <circle class="rt-eye" cx="-5" cy="10" r="2.6"/><circle class="rt-eye" cx="3" cy="10" r="2.6"/>
+          <circle class="rt-glint" cx="-5" cy="10" r=".9"/><circle class="rt-glint" cx="3" cy="10" r=".9"/>
+        </g>
+      </svg>
+      <!-- Kit 2 -->
+      <svg class="rt-kit rt-bounce" viewBox="0 0 90 64" aria-hidden="true">
+        <g class="rt-tail">
+          <path class="rt-back" d="M8 40c20 6 30 10 34 18s-4 10-15 6-21-9-24-15c2-3 3-5 5-9z"/>
+          <g fill="#232a35" opacity=".9"><ellipse cx="22" cy="54" rx="7" ry="4.5"/><ellipse cx="34" cy="58" rx="7" ry="4.5"/></g>
+        </g>
+        <ellipse class="rt-body" cx="48" cy="38" rx="28" ry="20"/>
+        <g transform="translate(30,44)">
+          <rect class="rt-leg back"  x="-3" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="6"  y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="20" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg front" x="29" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+        </g>
+        <g transform="translate(63,24)">
+          <ellipse class="rt-back" cx="-2" cy="8" rx="12" ry="9"/>
+          <path class="rt-mask" d="M-12 6h20v5c-3 4-9 6-12 6s-9-2-12-6z"/>
+          <circle class="rt-eye" cx="-5" cy="10" r="2.6"/><circle class="rt-eye" cx="3" cy="10" r="2.6"/>
+          <circle class="rt-glint" cx="-5" cy="10" r=".9"/><circle class="rt-glint" cx="3" cy="10" r=".9"/>
+        </g>
+      </svg>
+      <!-- Kit 3 -->
+      <svg class="rt-kit rt-bounce" viewBox="0 0 90 64" aria-hidden="true">
+        <g class="rt-tail">
+          <path class="rt-back" d="M8 40c20 6 30 10 34 18s-4 10-15 6-21-9-24-15c2-3 3-5 5-9z"/>
+          <g fill="#232a35" opacity=".9"><ellipse cx="22" cy="54" rx="7" ry="4.5"/><ellipse cx="34" cy="58" rx="7" ry="4.5"/></g>
+        </g>
+        <ellipse class="rt-body" cx="48" cy="38" rx="28" ry="20"/>
+        <g transform="translate(30,44)">
+          <rect class="rt-leg back"  x="-3" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="6"  y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg mid"   x="20" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+          <rect class="rt-leg front" x="29" y="0" width="5" height="14" rx="2.5" fill="#232a35"/>
+        </g>
+        <g transform="translate(63,24)">
+          <ellipse class="rt-back" cx="-2" cy="8" rx="12" ry="9"/>
+          <path class="rt-mask" d="M-12 6h20v5c-3 4-9 6-12 6s-9-2-12-6z"/>
+          <circle class="rt-eye" cx="-5" cy="10" r="2.6"/><circle class="rt-eye" cx="3" cy="10" r="2.6"/>
+          <circle class="rt-glint" cx="-5" cy="10" r=".9"/><circle class="rt-glint" cx="3" cy="10" r=".9"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <!-- ===== /Raccoon Family Fence Walk ===== -->
+
+  <footer class="mx-auto max-w-7xl px-4 pb-10">
+    <div class="card section flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="text-sm muted" id="footer-status">Tip: Use <span class="kbd">Shift</span> + <span class="kbd">Enter</span> for new lines in chat. <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> to Send.</div>
+      <div class="text-xs muted">TrashPanda Templates – Application Appropriation Interface</div>
+    </div>
+  </footer>
+
+  <script>
+    // THEME HANDLING
+    const themeBtn = document.getElementById('themeBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlEl = document.documentElement;
+    function iSun(){return '<svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M8.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M8.05 7.05 6.636 5.636"/></svg>'; }
+    function iMoon(){return '<svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'; }
+    function renderThemeIcon(){ themeIcon.innerHTML = htmlEl.classList.contains('dark') ? iSun() : iMoon(); }
+    themeBtn.addEventListener('click', () => {
+      const isDark = htmlEl.classList.toggle('dark');
+      localStorage.setItem('ai-job-app-theme', isDark ? 'dark' : 'light');
+      renderThemeIcon();
+    });
+    renderThemeIcon();
+
+    // API & STATE
+    const modelSelect = document.getElementById('modelSelect');
+    const chatHistoryEl = document.getElementById('chat-history');
+    const chatInputEl = document.getElementById('chat-input');
+    const backButton = document.getElementById('back-button');
+    const sendButton = document.getElementById('send-button');
+    const inputAreaEl = document.getElementById('input-area');
+    const typingIndicator = document.getElementById('typing-indicator');
+    const outputScrollContainer = document.getElementById('output-scroll-container');
+    const outputEl = document.getElementById('output');
+    const previewPanel = document.getElementById('panel-preview-export');
+    const copyBtn = document.getElementById('copyBtn');
+    const copyPackageBtn = document.getElementById('copyPackageBtn');
+    const missingWrap = document.getElementById('missingWrap');
+    const missingList = document.getElementById('missingList');
+    const rawWrap = document.getElementById('rawWrap');
+    const rawPre = document.getElementById('raw');
+    const outputLoader = document.getElementById('output-loader');
+    const outputError = document.getElementById('output-error');
+    const outputErrorText = document.getElementById('output-error-text');
+    const footerStatus = document.getElementById('footer-status');
+    const tabsContainer = document.getElementById('tabs-container');
+
+    const API_KEY = "AIzaSyDGtJQmn3q1JyH6o2r6hb3KpReQKQA3AuU";
+    const API_URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models/";
+
+    let appState = {
+      currentQuestionIndex: 0,
+      isAwaitingInput: true,
+      isGenerating: false,
+      jobDescription: null,
+      resumeText: null,
+      followUpAnswer: null,
+      lastGeneratedData: null,
+      activeTab: 'researchBrief',
+      reviewPhase: 'none',
+      resumeEdits: { employment: [], contact: {}, other: [] },
+      additionalIncorporations: '',
+    };
+
+    let questions = [
+      "First, paste your **current résumé** (plain text works best). We'll confirm any updates next.",
+      "Great. Now paste the **full job description** for the role.",
+      // Follow-up and "anything else" prompts are injected after résumé review
+    ];
+
+    const ANALYSIS_PROMPT = `
+You are a terse, no-nonsense executive career coach.
+A user has provided a job description and a resume.
+Your ONLY task is to compare them and generate a single, consolidated follow-up question for the user.
+This question must ask for all critical missing pieces needed to build their User Profile, fulfill job requirements, and add metrics.
+Return ONLY a JSON object with key "question".
+`.trim();
+
+    const FINAL_GENERATION_PROMPT = `
+You are an expert job-application assistant using the STAR method. Produce a rigorous, truthful, concise package in HTML.
+Return ONLY valid JSON matching the response_schema.
+
+Use the provided Job Description, Resume Text, and the Follow-up Answer to generate the content.
+If data is missing, list it in missingInfo and use placeholders like '(Quantify result)' in the generated text.
+
+Outputs Required in JSON:
+- missingInfo: Array of strings.
+- researchBrief: 150–250 words, HTML.
+- roleSummary: 120–180 words, HTML.
+- resumeATS: Plain text structure, minimal HTML.
+- resumeTailored: Reader-friendly HTML resume.
+- coverLetter: 180–250 words, HTML.
+`.trim();
+
+    // Raccoon parade show/hide
+    function rtShowRaccoonWalk(show = true) {
+      const el = document.getElementById('rtFamilyWalk');
+      if (!el) return;
+      el.classList.toggle('rt-hide', !show);
+    }
+
+    // UI helpers
+    function addChatMessage(role, content) {
+      let bubbleClass = '';
+      let iconHtml = '';
+      if (role === 'user') {
+        bubbleClass = 'bg-indigo-600 dark:bg-indigo-500 text-white rounded-l-xl rounded-tr-xl ml-auto';
+      } else {
+        bubbleClass = 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 rounded-r-xl rounded-tl-xl';
+        iconHtml = `
+          <div class="w-7 h-7 mr-2 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center flex-shrink-0 text-indigo-600 dark:text-indigo-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+          </div>`;
+      }
+      const messageEl = document.createElement('div');
+      const animationClass = role === 'ai' ? 'fade-in' : '';
+      messageEl.className = `${animationClass} flex max-w-lg lg:max-w-xl ${role === 'user' ? 'justify-end' : ''} ${role === 'ai' ? 'items-start' : ''}`;
+      content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      content = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 underline hover:text-indigo-800 dark:hover:text-indigo-300">$1</a>');
+      messageEl.innerHTML = `${iconHtml}<div class="px-4 py-3 ${bubbleClass}"><p class="text-sm leading-relaxed">${content.replace(/\n/g,'<br>')}</p></div>`;
+      chatHistoryEl.appendChild(messageEl);
+      chatHistoryEl.scrollTo({ top: chatHistoryEl.scrollHeight, behavior: 'smooth' });
+    }
+
+    function setInputState(disabled, placeholderText = "Paste response here...") {
+      chatInputEl.disabled = disabled;
+      sendButton.disabled = disabled;
+      chatInputEl.placeholder = placeholderText;
+      if (disabled) {
+        inputAreaEl.classList.add('opacity-60');
+        typingIndicator.classList.remove('hidden');
+        rtShowRaccoonWalk(true); // 🦝 show parade while analyzing
+      } else {
+        inputAreaEl.classList.remove('opacity-60');
+        typingIndicator.classList.add('hidden');
+        rtShowRaccoonWalk(false); // 🦝 hide parade when ready
+        if (placeholderText !== "Generation complete. Reload to start over.") chatInputEl.focus();
+      }
+    }
+
+    function askNextQuestion() {
+      if (appState.currentQuestionIndex < questions.length) {
+        const nextQ = questions[appState.currentQuestionIndex];
+        addChatMessage('ai', nextQ);
+        let placeholder = "Paste your answer here...";
+        if (appState.currentQuestionIndex === 2) placeholder = "Paste your answers to the follow-up question...";
+        if (appState.currentQuestionIndex === 3) placeholder = "Add any extra details you'd like incorporated, or say 'no'.";
+        setInputState(false, placeholder);
+        appState.isAwaitingInput = true;
+      } else {
+        runFinalGeneration();
+      }
+    }
+
+    function minLengthForStep(idx) {
+      if (idx === 0 || idx === 1) return 50;
+      return 5;
+    }
+
+    function storedAnswerForIndex(idx) {
+      if (idx === 0) return appState.resumeText || '';
+      if (idx === 1) return appState.jobDescription || '';
+      if (idx === 2) return appState.followUpAnswer || '';
+      if (idx === 3) return appState.additionalIncorporations || '';
+      return '';
+    }
+
+    function goBackOneQuestion() {
+      if (appState.isGenerating) { toast('Please wait for the current step to finish.'); return; }
+      if (appState.reviewPhase !== 'none' && appState.reviewPhase !== 'done') { toast('Finish the résumé review first.'); return; }
+      if (appState.currentQuestionIndex === 0) { toast('Already at the first question.'); return; }
+      appState.currentQuestionIndex = Math.max(0, appState.currentQuestionIndex - 1);
+      const prevAnswer = storedAnswerForIndex(appState.currentQuestionIndex);
+      askNextQuestion();
+      chatInputEl.value = prevAnswer || '';
+      chatInputEl.style.height = 'auto';
+      chatInputEl.dispatchEvent(new Event('input'));
+    }
+
+    function normalizeYesNo(txt) {
+      const t = (txt || '').trim().toLowerCase();
+      if (['y','yes','yeah','yep','sure','ok','okay','true'].includes(t)) return 'yes';
+      if (['n','no','nope','nah','false','next','skip'].includes(t)) return 'no';
+      return null;
+    }
+
+    function parseAreaChoice(txt) {
+      const t = (txt || '').trim().toLowerCase();
+      if (/^(?:1|employment|work|experience|history)\b/.test(t)) return 'employment';
+      if (/^(?:2|contact|info|email|phone|location)\b/.test(t)) return 'contact';
+      if (/^(?:3|other|add|remove|addition|removal)\b/.test(t)) return 'other';
+      if (/^(?:next|nxt|skip)\b/.test(t)) return 'next';
+      return null;
+    }
+
+    function startResumeReview() {
+      try { rtShowReviewBoardAnim(); } catch(e){}
+      appState.reviewPhase = 'askChange';
+      addChatMessage('ai', "Before we continue, **would you like to make any changes to your submitted résumé information?** (yes/no)");
+      setInputState(false, "Type yes/no…");
+      appState.isAwaitingInput = true;
+      appState.isGenerating = false;
+    }
+
+    function proceedAfterReview() {
+      appState.reviewPhase = 'done';
+      addChatMessage('ai', "Got it. Locking in your résumé info and moving on.");
+      continueAfterResumeCollected();
+    }
+
+    function continueAfterResumeCollected() {
+      toast("Resume locked. Next up: share the job description.");
+      appState.currentQuestionIndex = 1;
+      askNextQuestion();
+    }
+
+    function handleResumeReviewInput(userInput) {
+      const phase = appState.reviewPhase;
+      const normalized = (userInput || '').trim().toLowerCase();
+
+      if (phase === 'askChange') {
+        const yn = normalizeYesNo(normalized);
+        if (!yn) { addChatMessage('ai', "Please reply **yes** or **no**."); setInputState(false, "Type yes/no…"); appState.isAwaitingInput = true; return; }
+        if (yn === 'no') { proceedAfterReview(); return; }
+        appState.reviewPhase = 'chooseArea';
+        addChatMessage('ai', "Which area would you like to edit?\n<strong>1) Employment history</strong> · <strong>2) Contact information</strong> · <strong>3) Other additions/removals</strong>\nOr type <strong>next</strong> to move on.");
+        setInputState(false, "Type 1, 2, 3 or 'next'…");
+        appState.isAwaitingInput = true;
+        return;
+      }
+
+      if (phase === 'chooseArea') {
+        const choice = parseAreaChoice(normalized) || 'other';
+        if (choice === 'next') { proceedAfterReview(); return; }
+        if (choice === 'employment') {
+          appState.reviewPhase = 'employment_name_dates';
+          addChatMessage('ai', "Let's update your **most recent/current employer**. Provide:\n**Employer Name** and **Dates Worked** (e.g., <em>Acme Corp — Jan 2022 – Present</em>).");
+          setInputState(false, "Employer — Dates (e.g., Acme — Jan 2022 – Present)…");
+          appState.isAwaitingInput = true;
+          return;
+        }
+        if (choice === 'contact') {
+          appState.reviewPhase = 'contact';
+          addChatMessage('ai', "Update **Contact Information**. Provide any that apply:\n**Name**, **Email**, **Phone**, **Location (City/State)**, **LinkedIn URL**.");
+          setInputState(false, "Paste updated contact info…");
+          appState.isAwaitingInput = true;
+          return;
+        }
+        if (choice === 'other') {
+          appState.reviewPhase = 'other';
+          addChatMessage('ai', "Add or remove any **other information** (skills, certifications, awards, summaries, etc.).");
+          setInputState(false, "Type additions/removals…");
+          appState.isAwaitingInput = true;
+          return;
+        }
+      }
+
+      if (phase === 'employment_name_dates') {
+        const line = (userInput || '').trim();
+        if (!line) { addChatMessage('ai', "Please include **Employer name** and **Dates worked**."); setInputState(false, "Employer — Dates…"); appState.isAwaitingInput = true; return; }
+        appState.resumeEdits.employment.push(line);
+        appState.reviewPhase = 'employment_more';
+        addChatMessage('ai', "Add another employer? (yes/no) — or type **next** to proceed.");
+        setInputState(false, "Type yes/no or 'next'…");
+        appState.isAwaitingInput = true;
+        return;
+      }
+
+      if (phase === 'employment_more') {
+        const yn = normalizeYesNo(normalized);
+        if (yn === 'yes') {
+          appState.reviewPhase = 'employment_name_dates';
+          addChatMessage('ai', "Okay, add the **Employer Name — Dates worked** for the next most recent role.");
+          setInputState(false, "Employer — Dates…");
+          appState.isAwaitingInput = true;
+          return;
+        }
+        if (/^(next|skip)$/i.test(normalized)) {
+          proceedAfterReview();
+          return;
+        }
+        appState.reviewPhase = 'chooseArea';
+        addChatMessage('ai', "Edit anything else?\n<strong>1) Employment history</strong> · <strong>2) Contact information</strong> · <strong>3) Other additions/removals</strong>\nOr type <strong>next</strong> to proceed.");
+        setInputState(false, "Type 1, 2, 3 or 'next'…");
+        appState.isAwaitingInput = true;
+        return;
+      }
+
+      if (phase === 'contact') {
+        appState.resumeEdits.contact.freeform = (appState.resumeEdits.contact.freeform || '') + (appState.resumeEdits.contact.freeform ? "\n" : "") + (userInput || '').trim();
+        appState.reviewPhase = 'chooseArea';
+        addChatMessage('ai', "Contact info noted. Edit anything else?\n<strong>1) Employment history</strong> · <strong>2) Contact information</strong> · <strong>3) Other additions/removals</strong>\nOr type <strong>next</strong> to proceed.");
+        setInputState(false, "Type 1, 2, 3 or 'next'…");
+        appState.isAwaitingInput = true;
+        return;
+      }
+
+      if (phase === 'other') {
+        appState.resumeEdits.other.push((userInput || '').trim());
+        appState.reviewPhase = 'chooseArea';
+        addChatMessage('ai', "Added. Edit anything else?\n<strong>1) Employment history</strong> · <strong>2) Contact information</strong> · <strong>3) Other additions/removals</strong>\nOr type <strong>next</strong> to proceed.");
+        setInputState(false, "Type 1, 2, 3 or 'next'…");
+        appState.isAwaitingInput = true;
+        return;
+      }
+    }
+
+    async function handleSendClick() {
+      const userInput = chatInputEl.value.trim();
+
+      if (appState.reviewPhase !== 'none' && appState.reviewPhase !== 'done') {
+        if (!userInput) { toast("Please respond or type 'next' to move on."); return; }
+        addChatMessage('user', userInput);
+        chatInputEl.value = "";
+        chatInputEl.style.height = 'auto';
+        handleResumeReviewInput(userInput);
+        return;
+      }
+
+      const minLength = minLengthForStep(appState.currentQuestionIndex);
+      if (!userInput || userInput.length < minLength || !appState.isAwaitingInput || appState.isGenerating) {
+        if (userInput.length < minLength && appState.isAwaitingInput) toast(`Please provide a more detailed response (at least ${minLength} characters).`);
+        else if (!appState.isAwaitingInput) toast('Not ready for input yet—please wait for the next question.');
+        return;
+      }
+
+      addChatMessage('user', userInput);
+      chatInputEl.value = "";
+      chatInputEl.style.height = 'auto';
+      setInputState(true, "TrashPandas are analyzing…");
+      appState.isAwaitingInput = false;
+      appState.isGenerating = true;
+
+      try {
+        const index = appState.currentQuestionIndex;
+
+        if (index === 0) {
+          appState.resumeText = userInput;
+          startResumeReview();
+          return;
+        } else if (index === 1) {
+          appState.jobDescription = userInput;
+          toast("Analyzing JD and Resume for gaps...");
+          const followUpQuestion = await callGeminiAPI_Analysis();
+          const fallbackQ = `I require the following critical details:
+- Full legal name, email, phone, location (city/state)
+- Confirmation of degrees/certifications (e.g., CPA) and relevant dates
+- Full employment history (titles, companies, start/end months & years)
+- 3–5 quantified achievements aligned to the role (metrics, %/time saved, revenue impact)
+- Any required skills/tools in the JD you possess (confirm level + recent usage)`;
+          questions[2] = followUpQuestion || fallbackQ;
+          questions[3] = "Before we generate: **Is there anything else you want incorporated into your application** (e.g., achievements, preferences, portfolio links, constraints)? If yes, paste it here; otherwise say 'no'.";
+          appState.currentQuestionIndex = 2;
+          askNextQuestion();
+        } else if (index === 2) {
+          appState.followUpAnswer = userInput;
+          appState.currentQuestionIndex = 3;
+          askNextQuestion();
+        } else if (index === 3) {
+          const yn = (userInput || '').trim().toLowerCase();
+          appState.additionalIncorporations = (yn === 'no' || yn === 'n') ? '' : userInput;
+          appState.currentQuestionIndex++;
+          runFinalGeneration();
+        }
+
+      } catch (error) {
+        console.error("Error during chat step:", error);
+        addChatMessage('ai', `**Oops! An error occurred during analysis:** ${error.message}. Please try again.`);
+        if (appState.currentQuestionIndex < questions.length) {
+          setInputState(false, "Let's try that again. Please paste your response.");
+          appState.isAwaitingInput = true;
+        } else {
+          setInputState(true, "An error occurred. Please reload.");
+        }
+      } finally {
+        appState.isGenerating = false;
+      }
+    }
+    // Ensure the handler is callable from the console (e.g., for debugging/tests)
+    try { window.handleSendClick = handleSendClick; } catch (_) {}
+
+    // Gemini API calls
+    async function callGeminiAPI_Analysis() {
+      await new Promise(r => setTimeout(r, 300));
+      const model = modelSelect.value || 'gemini-2.5-flash-preview-09-2025';
+      const url = `${API_URL_BASE}${model}:generateContent?key=${API_KEY}`;
+
+      const userQuery = `Job Description:\n---\n${appState.jobDescription}\n---\n\nMy Resume:\n---\n${appState.resumeText}\n---`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        systemInstruction: { parts: [{ text: ANALYSIS_PROMPT }] },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: { type: "OBJECT", properties: { question: { type: "STRING" } }, required: ["question"] },
+          temperature: 0.5
+        }
+      };
+
+      const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const responseText = await response.text();
+      if (!response.ok) return null;
+
+      try {
+        const preliminaryJson = JSON.parse(responseText);
+        const candidate = preliminaryJson?.candidates?.[0];
+        const textContent = candidate?.content?.parts?.[0]?.text || '';
+        if (!textContent) return null;
+        const jsonData = JSON.parse(textContent);
+        if (jsonData && typeof jsonData.question === 'string' && jsonData.question.trim().length > 0) return jsonData.question.trim();
+      } catch (e) {
+        console.warn("Analysis parse issue:", e);
+      }
+      return null;
+    }
+
+    async function callGeminiAPI_FinalGeneration() {
+      await new Promise(r => setTimeout(r, 300));
+      const model = modelSelect.value || 'gemini-2.5-flash-preview-09-2025';
+      const url = `${API_URL_BASE}${model}:generateContent?key=${API_KEY}`;
+
+      const reviewBlock = `\n\nVerified Resume Edits:\nEmployment:\n- ${appState.resumeEdits.employment.join("\n- ") || 'None'}\n\nContact Updates:\n${appState.resumeEdits.contact.freeform || 'None'}\n\nOther Changes:\n- ${appState.resumeEdits.other.join("\n- ") || 'None'}`;
+      const extrasBlock = appState.additionalIncorporations ? `\n\nAdditional Incorporations:\n${appState.additionalIncorporations}` : '';
+      const userQuery = `Job Description:\n---\n${appState.jobDescription}\n---\n\nMy Resume:\n---\n${appState.resumeText}\n---\n\nFollow-up Answers:\n---\n${appState.followUpAnswer || 'No follow-up answers were provided.'}\n---${reviewBlock}${extrasBlock}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        systemInstruction: { parts: [{ text: FINAL_GENERATION_PROMPT }] },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              missingInfo: { type: "ARRAY", items: { "type": "STRING" } },
+              researchBrief: { type: "STRING" },
+              roleSummary: { type: "STRING" },
+              resumeATS: { type: "STRING" },
+              resumeTailored: { type: "STRING" },
+              coverLetter: { type: "STRING" }
+            },
+            required: ["missingInfo","researchBrief","roleSummary","resumeATS","resumeTailored","coverLetter"]
+          },
+          temperature: 0.6, topK: 32, topP: 0.95
+        }
+      };
+
+      const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const responseText = await response.text();
+      if (!response.ok) throw new Error(`Google API error (${response.status}): ${responseText}`);
+
+      let jsonData;
+      const root = JSON.parse(responseText);
+      const candidate = root?.candidates?.[0];
+      const contentText = candidate?.content?.parts?.[0]?.text || '';
+      if (!contentText) throw new Error("Received empty content from AI for final documents.");
+
+      try { jsonData = JSON.parse(contentText); }
+      catch {
+        const jsonMatch = contentText.match(/```json\s*([\s\S]*?)\s*```/);
+        if (!jsonMatch) throw new Error("Received an invalid inner JSON response format from the AI.");
+        jsonData = JSON.parse(jsonMatch[1]);
+      }
+
+      const required = ["missingInfo","researchBrief","roleSummary","resumeATS","resumeTailored","coverLetter"];
+      const missing = required.filter(k => !(k in jsonData));
+      const invalid = required.filter(k => k === 'missingInfo' ? !Array.isArray(jsonData[k]) : typeof jsonData[k] !== 'string');
+      if (missing.length || invalid.length) throw new Error(`AI response structure is incorrect. Missing: ${missing.join(', ')||'None'}. Invalid: ${invalid.join(', ')||'None'}.`);
+      return jsonData;
+    }
+
+    async function runFinalGeneration() {
+      // enforce that follow-up has been answered before generation
+      if (!appState.followUpAnswer || appState.followUpAnswer.trim().length < 3) {
+        appState.currentQuestionIndex = 2;
+        addChatMessage('ai', "Please answer the follow-up question before we generate your package.");
+        setInputState(false, "Paste your answers to the follow-up question...");
+        appState.isAwaitingInput = true;
+        return;
+      }
+
+      setInputState(true, "Generating final documents...");
+      addChatMessage('ai', "Okay, I have all the info. Generating the full application package now. This might take a moment...");
+
+      outputEl.innerHTML = '';
+      outputLoader.classList.remove('hidden');
+      outputError.classList.add('hidden');
+      missingWrap.classList.add('hidden');
+      rawWrap.classList.add('hidden');
+      copyPackageBtn.classList.add('hidden');
+
+      try {
+        const finalData = await callGeminiAPI_FinalGeneration();
+        appState.lastGeneratedData = finalData;
+        renderMissing(finalData.missingInfo || []);
+        if (window.tpExport) {
+          window.tpExport.renderPreviewExport({
+            originalResume: appState.resumeText || '',
+            tailoredResume: finalData.resumeTailored || '',
+            coverLetter: finalData.coverLetter || '',
+            researchBrief: finalData.researchBrief || '',
+            roleSummary: finalData.roleSummary || '',
+            jobDescription: appState.jobDescription || '',
+            company: finalData.company || '',
+            role: finalData.role || '',
+            rawData: finalData
+          });
+        }
+        renderOutput();
+        rawPre.textContent = JSON.stringify(finalData, null, 2);
+        rawWrap.classList.remove('hidden');
+        copyPackageBtn.classList.remove('hidden');
+        toast('Package generated successfully!');
+        addChatMessage('ai', "Done! Your application package is ready in the 'Outputs' panel. Use the tabs to view each document.");
+        setInputState(true, "Generation complete. Reload to start over.");
+      } catch (error) {
+        console.error("Error during final generation:", error);
+        showOutputError(error.message);
+        addChatMessage('ai', `**Generation Failed!** ${error.message}.`);
+        setInputState(true, "Error occurred. Please reload the page.");
+      } finally {
+        outputLoader.classList.add('hidden');
+      }
+    }
+
+    function renderMissing(list) {
+      missingList.innerHTML = '';
+      if (Array.isArray(list) && list.length > 0) {
+        const valid = list.filter(i => typeof i === 'string' && i.trim() !== '');
+        if (valid.length > 0) {
+          valid.forEach(item => { const li=document.createElement('li'); li.textContent=item; missingList.appendChild(li); });
+          missingWrap.classList.remove('hidden');
+        } else missingWrap.classList.add('hidden');
+      } else missingWrap.classList.add('hidden');
+    }
+
+    function renderOutput() {
+      const initialMsg = '<p class="muted">Complete the Q&A to generate your package.</p>';
+      outputScrollContainer.scrollTop = 0;
+      const isPreviewTab = appState.activeTab === 'previewExport';
+      if (previewPanel) previewPanel.classList.toggle('hidden', !isPreviewTab);
+      outputEl.classList.toggle('hidden', isPreviewTab);
+
+      if (isPreviewTab) {
+        copyBtn.classList.add('hidden');
+        copyBtn.disabled = true;
+        if (!appState.lastGeneratedData) {
+          copyPackageBtn.classList.add('hidden');
+        } else {
+          copyPackageBtn.classList.remove('hidden');
+        }
+        return;
+      }
+
+      copyBtn.classList.remove('hidden');
+
+      if (!appState.lastGeneratedData) {
+        outputEl.innerHTML = initialMsg;
+        copyBtn.disabled = true;
+        copyPackageBtn.classList.add('hidden');
+        return;
+      }
+      const htmlContent = (appState.lastGeneratedData[appState.activeTab] || '').trim();
+      const sanitized = htmlContent
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'')
+        .replace(/onerror\s*=\s*['"][^'"]*['"]/gi,'')
+        .replace(/onload\s*=\s*['"][^'"]*['"]/gi,'')
+        .replace(/javascript:/gi,'');
+      outputEl.innerHTML = sanitized || '<p class="muted">No content generated for this section.</p>';
+      copyBtn.disabled = !sanitized;
+      copyPackageBtn.classList.remove('hidden');
+    }
+
+    function showOutputError(message) {
+      outputEl.innerHTML = '';
+      outputLoader.classList.add('hidden');
+      const safe = message.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      outputErrorText.textContent = safe;
+      outputError.classList.remove('hidden');
+      copyBtn.disabled = true;
+      copyPackageBtn.classList.add('hidden');
+      missingWrap.classList.add('hidden');
+      rawWrap.classList.add('hidden');
+    }
+
+    const tabs = Array.from(tabsContainer.querySelectorAll('[data-tab]'));
+    tabs.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+    function switchTab(tabName) {
+      appState.activeTab = tabName;
+      tabs.forEach(b => b.classList.toggle('tab-btn-active', b.dataset.tab === tabName));
+      renderOutput();
+      const friendly = tabFriendlyName(tabName);
+      toast(`Switched to ${friendly}.`);
+    }
+
+    function tabFriendlyName(key) {
+      switch (key) {
+        case 'researchBrief': return 'Research';
+        case 'roleSummary': return 'Role Summary';
+        case 'resumeATS': return 'ATS Résumé';
+        case 'resumeTailored': return 'Tailored Résumé';
+        case 'coverLetter': return 'Cover Letter';
+        case 'previewExport': return 'Preview & Export';
+        default: return key.replace(/([A-Z])/g,' $1').replace(/^./, s => s.toUpperCase());
+      }
+    }
+
+    let toastTimeout;
+    function toast(msg) {
+      if (!footerStatus) return;
+      clearTimeout(toastTimeout);
+      footerStatus.textContent = msg;
+      toastTimeout = setTimeout(() => {
+        if (footerStatus.textContent === msg) {
+          footerStatus.innerHTML = `Tip: Use <span class="kbd">Shift</span> + <span class="kbd">Enter</span> for new lines in chat. <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> to Send.`;
+        }
+      }, 3500);
+    }
+
+    copyBtn.addEventListener('click', async () => {
+      if (appState.activeTab === 'previewExport') {
+        toast('Use the Preview & Export actions above for downloads.');
+        return;
+      }
+      const contentToCopy = appState.lastGeneratedData ? (appState.lastGeneratedData[appState.activeTab] || '') : '';
+      if (!contentToCopy) { toast('Nothing to copy for this tab.'); return; }
+      try {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = contentToCopy;
+        const plainText = tempDiv.innerText || '';
+        if (!plainText.trim()) { toast('Nothing to copy for this section.'); return; }
+        await navigator.clipboard.writeText(plainText.trim());
+        toast('Copied section (plain text).');
+      } catch {
+        try { await navigator.clipboard.writeText(contentToCopy); toast('Copied section (HTML).'); }
+        catch { toast('Copy failed. Try manual selection.'); }
+      }
+    });
+
+    copyPackageBtn.addEventListener('click', async () => {
+      if (!appState.lastGeneratedData) { toast('No data package to copy.'); return; }
+      const followUp = appState.followUpAnswer || '';
+      const nameMatch = followUp.match(/Name:\s*(.*)/i);
+      const emailMatch = followUp.match(/Email:\s*(.*)/i);
+      const phoneMatch = followUp.match(/Phone:\s*(.*)/i);
+      const cityMatch = followUp.match(/Location:\s*(.*)/i);
+
+      const pkg = `
+<<<BEGIN RESUME DATA PACKAGE>>>
+
+[USER PROFILE]
+Full Name: ${nameMatch ? nameMatch[1].trim() : '(Not provided)'}
+Email: ${emailMatch ? emailMatch[1].trim() : '(Not provided)'}
+Phone: ${phoneMatch ? phoneMatch[1].trim() : '(Not provided)'}
+City/State: ${cityMatch ? cityMatch[1].trim() : '(Not provided)'}
+LinkedIn (optional):
+Professional Summary (2–4 sentences):
+
+[KEY SKILLS]
+(Extracted from resume or provided by user)
+
+[CERTIFICATIONS]
+(Extracted from resume or provided by user)
+
+[WORK EXPERIENCE]
+(Full plain text resume pasted here)
+---
+${appState.resumeText}
+---
+
+[EDUCATION]
+(Extracted from resume)
+
+[JOB LISTING]
+Job Title: (Extracted from JD)
+Company: (Extracted from JD)
+Location: (Extracted from JD)
+Full Job Description (paste or summarize):
+---
+${appState.jobDescription}
+---
+Top Requirements (list the main 3–5):
+- (From AI Analysis)
+- (From AI Analysis)
+- (From AI Analysis)
+
+[CUSTOMIZATION NOTES]
+Tone Preference: Professional, STAR Method
+Focus Areas: (Determined by AI from JD)
+Resume Format: Hybrid (Tailored + ATS)
+Additional Instructions:
+---
+Follow-up Q&A:
+${questions[2] || '(No follow-up question was asked)'}
+Answer:
+${appState.followUpAnswer || '(No answer provided)'}
+---
+
+[AI GENERATED OUTPUTS]
+---
+Research Brief:
+${appState.lastGeneratedData.researchBrief.replace(/<[^>]+>/g, ' ')}
+---
+Role Summary:
+${appState.lastGeneratedData.roleSummary.replace(/<[^>]+>/g, ' ')}
+---
+ATS Résumé:
+${appState.lastGeneratedData.resumeATS.replace(/<[^>]+>/g, ' ')}
+---
+Tailored Résumé:
+${appState.lastGeneratedData.resumeTailored.replace(/<[^>]+>/g, ' ')}
+---
+Cover Letter:
+${appState.lastGeneratedData.coverLetter.replace(/<[^>]+>/g, ' ')}
+---
+
+<<<END RESUME DATA PACKAGE>>>`.trim();
+
+      try { await navigator.clipboard.writeText(pkg); toast('Copied full data package to clipboard!'); }
+      catch { toast('Copy failed. Try manual selection.'); }
+    });
+
+    chatInputEl.addEventListener('input', () => {
+      chatInputEl.style.height = 'auto';
+      const h = chatInputEl.scrollHeight; const max = 150;
+      chatInputEl.style.height = `${Math.min(h, max)}px`;
+    });
+
+    chatInputEl.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); handleSendClick(); }
+    });
+
+    if (backButton) backButton.addEventListener('click', goBackOneQuestion);
+    sendButton.addEventListener('click', handleSendClick);
+    copyBtn.disabled = true;
+    copyPackageBtn.classList.add('hidden');
+    askNextQuestion();
+    renderOutput();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+  <script>
+    window.tpExport = window.tpExport || (() => {
+      const $ = (id) => document.getElementById(id);
+      const showToast = typeof window.toast === 'function' ? window.toast.bind(window) : null;
+
+      function computeATSScore(jobDesc, tailored) {
+        if (!jobDesc || !tailored) return 0;
+        const words = jobDesc.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
+          .split(/\s+/).filter(w => w.length >= 5);
+        if (!words.length) return 0;
+        const freq = new Map();
+        words.forEach(w => freq.set(w, (freq.get(w) || 0) + 1));
+        const top = Array.from(freq.entries())
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 30)
+          .map(([w]) => w);
+        if (!top.length) return 0;
+        const body = tailored.toLowerCase();
+        let hits = 0;
+        top.forEach(w => { if (body.includes(w)) hits++; });
+        const raw = hits / top.length;
+        const density = Math.min(body.length / 4000, 1);
+        return Math.max(0, Math.min(Math.round(100 * (0.85 * raw + 0.15 * density)), 100));
+      }
+
+      function setATS(score) {
+        const bar = $('tp-ats-bar');
+        const lab = $('tp-ats-label');
+        if (bar) {
+          bar.style.width = `${score}%`;
+          bar.style.background = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+        }
+        if (lab) lab.textContent = `${score}%`;
+      }
+
+      function exportPDF() {
+        const panel = $('panel-preview-export');
+        if (!panel) { window.print(); return; }
+        const win = window.open('', '_blank');
+        if (!win) {
+          if (showToast) showToast('Pop-up blocked. Allow pop-ups to save as PDF.');
+          return;
+        }
+        const clone = panel.cloneNode(true);
+        clone.classList.remove('hidden');
+        const controls = clone.querySelector('div.flex.flex-wrap');
+        if (controls) controls.remove();
+        win.document.write('<html><head><meta charset="utf-8"><title>Application Package — Preview</title><style>:root{color-scheme:light;}body{font-family:Arial,Helvetica,sans-serif;line-height:1.35;margin:28px;color:#111;}h1{font-size:18px;margin:0 0 14px 0;}h2{font-size:14px;margin:18px 0 6px 0;}p{margin:0 0 8px 0;}hr{border:0;border-top:1px solid #ddd;margin:14px 0;}pre,article{white-space:pre-wrap;font-family:inherit;font-size:11.5pt;}.small{font-size:10.5pt;color:#444;}@page{margin:18mm;}button{display:none !important;}</style></head><body>');
+        win.document.write('<h1>Application Package — Preview</h1>');
+        win.document.write(clone.innerHTML);
+        win.document.write('<script>window.onload=()=>setTimeout(()=>window.print(),250)<\\/script></body></html>');
+        win.document.close();
+      }
+
+      function exportFullHTML() {
+        const fullDoc = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([fullDoc], { type: 'text/html;charset=utf-8' });
+        const filename = 'TrashPandas_App.html';
+        if (window.saveAs) {
+          saveAs(blob, filename);
+        } else {
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement('a');
+          anchor.href = url;
+          anchor.download = filename;
+          anchor.click();
+          URL.revokeObjectURL(url);
+        }
+        if (showToast) showToast('Downloading full HTML...');
+      }
+
+      function tocText(meta) {
+        return [
+          'APPLICATION PACKAGE — TABLE OF CONTENTS',
+          '--------------------------------------',
+          `Company: ${meta.company || 'N/A'}`,
+          `Role: ${meta.role || 'N/A'}`,
+          `Generated: ${meta.timestamp || new Date().toISOString()}`,
+          `ATS score (estimated): ${Number.isFinite(meta.atsScore) ? `${meta.atsScore}%` : 'N/A'}`,
+          '',
+          'FILES:',
+          '  01_Tailored_Resume.txt',
+          '  02_Cover_Letter.txt',
+          '  03_Original_Resume.txt',
+          '  04_Role_Summary.txt',
+          '  05_Research_Brief.txt',
+          '  06_Job_Description.txt',
+          '  metadata.json'
+        ].join('\n');
+      }
+
+      async 
+      function exportTextFile(filename, content) {
+        const blob = new Blob([content || ''], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, filename);
+      }
+
+      function exportFullPackageTXT(payload) {
+        const meta = payload && payload.appMeta ? payload.appMeta : {};
+        const lines = [];
+        lines.push(`Company: ${meta.company || ''}`);
+        lines.push(`Role: ${meta.role || ''}`);
+        lines.push(`Generated: ${meta.timestamp || ''}`);
+        if (typeof meta.atsScore === 'number') lines.push(`ATS Match Estimate: ${meta.atsScore}%`);
+        lines.push('');
+        lines.push('=== Tailored Résumé ===');
+        lines.push(payload.tailoredResume || '');
+        lines.push('');
+        lines.push('=== Cover Letter ===');
+        lines.push(payload.coverLetter || '');
+        lines.push('');
+        if (payload.roleSummary && payload.roleSummary.trim()) {
+          lines.push('=== Role Summary ===');
+          lines.push(payload.roleSummary);
+          lines.push('');
+        }
+        if (payload.researchBrief && payload.researchBrief.trim()) {
+          lines.push('=== Research Brief ===');
+          lines.push(payload.researchBrief);
+          lines.push('');
+        }
+        if (payload.jobDescription && payload.jobDescription.trim()) {
+          lines.push('=== Job Description ===');
+          lines.push(payload.jobDescription);
+          lines.push('');
+        }
+        return lines.join('\n');
+      }
+function exportZIP(payload) {
+        if (!window.JSZip || !window.saveAs) {
+          if (showToast) showToast('ZIP export unavailable in this environment.');
+          else alert('ZIP export unavailable.');
+          return;
+        }
+        const hasContent = payload && Object.values({
+          tailoredResume: payload.tailoredResume,
+          coverLetter: payload.coverLetter,
+          originalResume: payload.originalResume,
+          jobDescription: payload.jobDescription,
+          researchBrief: payload.researchBrief,
+          roleSummary: payload.roleSummary
+        }).some(Boolean);
+        if (!hasContent) {
+          if (showToast) showToast('Generate your package before downloading a ZIP.');
+          else alert('Generate your package before downloading a ZIP.');
+          return;
+        }
+
+        const zip = new JSZip();
+        zip.file('01_Tailored_Resume.txt', payload.tailoredResume || '');
+        zip.file('02_Cover_Letter.txt', payload.coverLetter || '');
+        zip.file('03_Original_Resume.txt', payload.originalResume || '');
+        zip.file('04_Role_Summary.txt', payload.roleSummary || '');
+        zip.file('05_Research_Brief.txt', payload.researchBrief || '');
+        zip.file('06_Job_Description.txt', payload.jobDescription || '');
+
+        const meta = {
+          company: payload.appMeta?.company || '',
+          role: payload.appMeta?.role || '',
+          timestamp: payload.appMeta?.timestamp || new Date().toISOString(),
+          atsScore: payload.appMeta?.atsScore ?? null,
+          appVersion: 'PreviewExport_v1'
+        };
+        zip.file('TABLE_OF_CONTENTS.txt', tocText(meta));
+        zip.file('metadata.json', JSON.stringify(meta, null, 2));
+
+        const safe = (value) => (value || 'file').toString().replace(/[^\w\-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'file';
+        const filename = `TrashPandas_Application_Package_${safe(meta.company || 'Company')}_${safe(meta.role || 'Role')}.zip`;
+        const blob = await zip.generateAsync({ type: 'blob' });
+        saveAs(blob, filename);
+      }
+
+      function exportJSON(jsonString) {
+        if (!jsonString) {
+          if (showToast) showToast('Generate your package before downloading JSON.');
+          else alert('Generate your package before downloading JSON.');
+          return;
+        }
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'TrashPandas_Application_Package.json';
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function wire(payload) {
+        const btnPDF = $('tp-btn-pdf');
+        const btnZIP = $('tp-btn-zip');
+        const btnHTML = $('tp-btn-html');
+        const btnJSON = $('tp-btn-json');
+        const btnTXTResume = $('tp-btn-txt-resume');
+        const btnTXTCover = $('tp-btn-txt-cover');
+        const btnTXTAll = $('tp-btn-txt-all');
+
+        const hasContent = !!(payload && payload.hasContent);
+
+        if (btnPDF) {
+          btnPDF.disabled = !hasContent;
+          btnPDF.onclick = hasContent ? () => exportPDF() : null;
+        }
+
+        if (btnZIP) {
+          btnZIP.disabled = !hasContent;
+          btnZIP.onclick = hasContent ? () => exportZIP(payload) : null;
+        }
+
+        if (btnTXTResume) {
+          btnTXTResume.disabled = !hasContent;
+          btnTXTResume.onclick = hasContent ? () => exportTextFile('Tailored_Resume.txt', payload.tailoredResume || '') : null;
+        }
+        if (btnTXTCover) {
+          btnTXTCover.disabled = !hasContent;
+          btnTXTCover.onclick = hasContent ? () => exportTextFile('Cover_Letter.txt', payload.coverLetter || '') : null;
+        }
+        if (btnTXTAll) {
+          btnTXTAll.disabled = !hasContent;
+          btnTXTAll.onclick = hasContent ? () => exportTextFile('Job_Application_Package.txt', exportFullPackageTXT(payload)) : null;
+        }
+
+
+        if (btnHTML) {
+          btnHTML.disabled = false;
+          btnHTML.onclick = () => exportFullHTML();
+        }
+
+        if (btnJSON) {
+          const hasJson = !!(payload && payload.jsonData);
+          btnJSON.disabled = !hasJson;
+          btnJSON.onclick = hasJson ? () => exportJSON(payload.jsonData) : null;
+        }
+      }
+
+      function renderPreviewExport(data) {
+        const details = data || {};
+        const placeholder = 'Generate your package to populate this preview.';
+        const setText = (id, value) => {
+          const el = $(id);
+          if (el) el.textContent = value && value.trim() ? value : placeholder;
+        };
+        setText('tp-original', details.originalResume || '');
+        setText('tp-tailored', details.tailoredResume || '');
+        setText('tp-cover', details.coverLetter || '');
+
+        const score = computeATSScore(details.jobDescription || '', details.tailoredResume || '');
+        setATS(score);
+
+        const hasContent = Boolean(
+          (details.originalResume && details.originalResume.trim()) ||
+          (details.tailoredResume && details.tailoredResume.trim()) ||
+          (details.coverLetter && details.coverLetter.trim()) ||
+          (details.researchBrief && details.researchBrief.trim()) ||
+          (details.roleSummary && details.roleSummary.trim())
+        );
+
+        wire({
+          hasContent,
+          originalResume: details.originalResume || '',
+          tailoredResume: details.tailoredResume || '',
+          coverLetter: details.coverLetter || '',
+          jobDescription: details.jobDescription || '',
+          researchBrief: details.researchBrief || '',
+          roleSummary: details.roleSummary || '',
+          jsonData: details.rawData ? JSON.stringify(details.rawData, null, 2) : null,
+          appMeta: {
+            company: details.company || '',
+            role: details.role || '',
+            timestamp: new Date().toISOString(),
+            atsScore: score
+          }
+        });
+      }
+
+      renderPreviewExport({});
+      return { renderPreviewExport };
+    })();
+  </script>
+
+  <!-- Placeholder: Board of Raccoon Directors scene -->
+  <section id="scene-board" class="scene">
+    <h2 class="scene-title">Board of Raccoon Directors</h2>
+    <p class="scene-tagline">
+      “They’ve got your files, your phone number, and I think that one has your glasses.”
+    </p>
+    <p class="scene-subtext">
+      Our expert raccoons are convening in secret to assess your brilliance.
+      That one’s just judging you though.
+    </p>
+
+    <figure class="scene-media">
+      <img
+        src="assets/animations/board-of-raccoon-directors.png"
+        alt="Raccoon board of directors reviewing job applications in a dramatic meeting"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
+  
+
+  <section id="scene-dumpster" class="scene">
+    <h2 class="scene-title">Q&amp;A / Info Gathering — DUMPSTER DIVING</h2>
+    <p class="scene-tagline">“They’ve got questions, and they’re not leaving the dumpster until they get answers.”</p>
+
+    <figure class="scene-media">
+      <video
+        src="assets/animations/dumpster-diving-raccoon.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Raccoon popping out of a trash can and rummaging for answers"
+      ></video>
+    </figure>
+  </section>
+
+  <section id="scene-refined" class="scene scene-final">
+    <h2 class="scene-title">Refined by Raccoons</h2>
+    <p class="scene-tagline">Dumpster to Desk, Bin to Boss.</p>
+
+    <figure class="scene-media">
+      <video
+        src="assets/animations/refined-by-raccoons.mp4"
+        autoplay
+        muted
+        playsinline
+        preload="metadata"
+        aria-label="Raccoon transforms from dumpster to professional desk setting"
+      ></video>
+    </figure>
+
+    <p class="scene-subtext">Landfill to LinkedIn. Curbside to C-Suite. Feral to Founder. Rapid to respected.</p>
+  </section>
+
+</section>
+
+  <script>
+    (function initTonePatch(){
+      if (!document.getElementById('rt-tonepatch')) {
+        const style = document.createElement('style');
+        style.id = 'rt-tonepatch';
+        style.textContent = `
+@keyframes rtWrenchSnatch{0%{transform:translateX(0) rotate(0)}12%{transform:translateX(-4px) rotate(-6deg)}26%{transform:translateX(22px) rotate(8deg)}40%{transform:translateX(16px) rotate(4deg)}60%{transform:translateX(18px) rotate(5deg)}100%{transform:translateX(18px) rotate(5deg)}}
+@keyframes rtBinRollOut{0%{transform:translate(-6px,2px) rotate(-8deg);filter:blur(.6px) brightness(.92);opacity:.9}30%{transform:translate(2px,0) rotate(5deg);filter:blur(.4px) brightness(.96)}55%{transform:translate(-1px,-1px) rotate(-3deg)}80%,100%{transform:translate(0,0) rotate(0);filter:none;opacity:1}}
+@keyframes rtDeskGlowUp{0%{transform:translateY(2px) scale(.995);filter:saturate(.92) contrast(.96)}40%{transform:translateY(0) scale(1.002);filter:saturate(1) contrast(1)}100%{transform:translateY(0) scale(1);filter:saturate(1.02) contrast(1.02)}}
+@keyframes rtReadyStamp{0%{transform:scale(.92) translateY(6px);opacity:0}70%{transform:scale(1.02) translateY(0);opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
+`;
+        document.head.appendChild(style);
+      }
+      window.rtTonePatch = function(name, slotSelector){
+        const svg = document.querySelector(`${slotSelector} svg`);
+        if (!svg) return;
+        if (name === 'troubleshoot') {
+          const wrench = svg.querySelector('.wrench');
+          if (wrench) wrench.style.animation = 'rtWrenchSnatch 700ms cubic-bezier(.22,.61,.36,1) 1 forwards';
+        }
+        if (name === 'dumpster') {
+          const pop = svg.querySelector('.pop, .raccoon');
+          if (pop) pop.style.animation = 'rtBinRollOut 1100ms cubic-bezier(.22,.61,.36,1) 1 forwards';
+        }
+        if (name === 'refined') {
+          svg.style.animation = 'rtDeskGlowUp 600ms cubic-bezier(.22,.61,.36,1) 1 forwards';
+          const stamp = svg.querySelector('.thumb, .stamp-ready');
+          if (stamp) stamp.style.animation = 'rtReadyStamp 380ms cubic-bezier(.22,.61,.36,1) 1 420ms both';
+          const spark = svg.querySelector('.spark');
+          if (spark) spark.style.opacity = '0';
+        }
+      };
+    })();
+
+    (function attachTonePatch(){
+      const original = window.rtAttachAnim;
+      if (typeof original === 'function') {
+        window.rtAttachAnim = function(slotSelector, name){
+          const result = original.apply(this, arguments);
+          try { if (window.rtTonePatch) window.rtTonePatch(name, slotSelector); } catch (err) {}
+          return result;
+        };
+      }
+    })();
+  
+// ---- PATCH: Allow 1-character responses for resume edit confirmation ----
+(function(){
+  const _origValidate = window.validateUserInput;
+  window.validateUserInput = function(userInput){
+    try{
+      if (window.appState && appState.currentStep === "resumeEditConfirm") {
+        if ((userInput || "").trim().length < 1) {
+          if (typeof showError === "function") showError("Please answer yes or no.");
+          return false;
+        }
+        return true;
+      }
+    }catch(e){}
+    return _origValidate ? _origValidate(userInput) : true;
+  };
+})();
+// ---- END PATCH ----
+</script>
+</body>
+</html>
